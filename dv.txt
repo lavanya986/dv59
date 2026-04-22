@@ -9,8 +9,10 @@ docker pull nginx
 docker run -d -p 8080:80 nginx
 http://localhost:8080
 docker ps
+copy the container id and paste below
 docker stop <container_id>
 docker rm <container_id>
+docker ps
 
 
 
@@ -187,6 +189,189 @@ save
 goto cp
 docker images
 docker ps
+
+
+20.  goto cmd
+mvn --version
+java --version
+dacker  --version
+git --version
+goto download
+mvn archetype:generate
+com.example
+sample-webapp
+
+goto fileexploser->goto file sample-webapp
+scr create folder ->main->java->com->example->     select text document->HelloServlet.java
+                         ->web.app(folder)->web-inf(folder)->index.jps(text document)
+                 ->test->java->com->example->     select text document->HelloServletTest.java
+
+this is the code copy paste HelloServletTest.java
+@Test
+void testDoGet() throws Exception {
+    HelloServlet servlet = new HelloServlet();
+
+    HttpServletRequest request = mock(HttpServletRequest.class);
+    HttpServletResponse response = mock(HttpServletResponse.class);
+
+    StringWriter stringWriter = new StringWriter();
+    PrintWriter writer = new PrintWriter(stringWriter);
+
+    when(response.getWriter()).thenReturn(writer);
+
+    servlet.doGet(request, response);
+
+    writer.flush();
+    String result = stringWriter.toString();
+
+    assert(result.contains("Deployment Successful!"));
+    assert(result.contains("GitHub"));
+    assert(result.contains("Jenkins"));
+    assert(result.contains("Docker"));
+    assert(result.contains("Tomcat 11"));
+
+    verify(response).setContentType("text/html");
+}
+
+save
+
+this is the code for helloservlet
+
+package com.example;
+
+import java.io.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+
+public class HelloServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("text/html");
+
+        PrintWriter out = response.getWriter();
+
+        out.println("<h2>Deployment Successful!</h2>");
+        out.println("<h3>GitHub > Jenkins > Docker > Tomcat 11</h3>");
+    }
+}
+
+create index.jsp  folder in how create WEB-INF file below
+
+<html>
+
+<head>
+    <title>CI/CD Demo</title>
+</head>
+
+<body>
+
+    <h1>Welcome to CI/CD Pipeline Demo</h1>
+
+    <a href="hello">Click Here</a>
+
+</body>
+
+</html>
+
+change the web.xml code
+
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         version="6.0">
+
+    <servlet>
+        <servlet-name>HelloServlet</servlet-name>
+        <servlet-class>com.example.HelloServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+
+goto  scr and pom.xml file right click select documentfile ->Dockerfile  and select another text document file Jenkins
+
+this is jenkin code
+pipeline {
+    stages {
+
+        stage('Build WAR') {
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t %IMAGE_NAME% .'
+            }
+        }
+
+        stage('Stop Old Container') {
+            steps {
+                bat 'docker stop %CONTAINER_NAME% || exit 0'
+                bat 'docker rm %CONTAINER_NAME% || exit 0'
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                bat 'docker run -d -p 8085:8080 --name %CONTAINER_NAME% %IMAGE_NAME%'
+            }
+        }
+    }
+}
+
+code for dockerfile
+
+FROM tomcat:11.0-jdk17
+
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
+
+EXPOSE 8080
+
+
+CMD ["catalina.sh", "run"]
+
+
+create git repositary and copy all file 
+
+goto genkins ->item-> webApp-ci-cd ->mavenproject->ok
+
+5
+5
+select git past the git url 
+add credential
+main
+select build whenever a and poll scm
+
+* * * * *
+
+goals and option->pack
+poststep->run onlly if build succeeds
+
+post-build action->add post-builld action
+taarget/*.war
+
+apply and save->build
+workplace 
+status->click sampl-webapp.war
+
+goto browser localhost:8087/manager/html
+notrun goto file exploser->windows->apache-tomcat-11.0.20->bbin ->startup.bat->run
+
+
+goto browserr refresh  page openscoll down ->choose file->download->sample.web app->deploy
+select in table sample-webapp->click hear
+
+
+
+
+
+
 
 
 
